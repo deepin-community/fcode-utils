@@ -1,0 +1,19 @@
+--- fcode-utils-1.0.2.orig/romheaders/Makefile
++++ fcode-utils-1.0.2/romheaders/Makefile
+@@ -23,6 +23,7 @@
+ 
+ CC  = gcc
+ CFLAGS += -O2 -Wall -W -ansi -I../shared
++STRIP = strip
+ 
+ SOURCES = romheaders.c ../shared/classcodes.c
+ 
+@@ -32,7 +33,7 @@
+ 
+ romheaders: $(SOURCES)
+ 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(SOURCES) -o $@
+-	strip romheaders
++	$(STRIP) romheaders
+ 	
+ clean:
+ 	rm -f *~

@@ -1,0 +1,6 @@
+01-sys-types-h.patch
+02-toke-olen-type.patch
+03-makefile.patch
+04-getopt.patch
+05-bigendian.patch
+nostrip.patch

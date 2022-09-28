@@ -1,0 +1,9 @@
+Document: fcode-toke
+Title: OpenBIOS Tokenizer User's Guide
+Author: David L. Paktor
+Abstract: This manual describes toke, an open-source FCode Tokenizer from the OpenBIOS project.
+Section: Programming
+
+Format: HTML
+Index: /usr/share/doc/fcode-utils/documentation/toke.html
+Files: /usr/share/doc/fcode-utils/documentation/toke.html

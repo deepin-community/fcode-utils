@@ -1,0 +1,9 @@
+Document: fcode-localvalues
+Title: Support for "Local Values" in the OpenBIOS Tokenizer
+Author: David L. Paktor
+Abstract: This maual describes "Local Values" in the OpenBIOS Tokenizer. "Local Values" are an IBM-specific extension of FORTH syntax, currently used both by the FCode Tokenizer and Platform Firmware.
+Section: Programming
+
+Format: HTML
+Index: /usr/share/doc/fcode-utils/documentation/localvalues.html
+Files: /usr/share/doc/fcode-utils/documentation/localvalues.html

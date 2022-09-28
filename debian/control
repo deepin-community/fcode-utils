@@ -1,0 +1,22 @@
+Source: fcode-utils
+Maintainer: Aurelien Jarno <aurel32@debian.org>
+Section: misc
+Priority: optional
+Build-Depends: debhelper-compat (= 13)
+Rules-Requires-Root: no
+Standards-Version: 4.5.0
+Homepage: http://www.openbios.org
+
+Package: fcode-utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: OpenBIOS FCode utilities
+ FCode is a Forth programming language dialect compliant with ANS Forth.
+ It can exist in two forms; source code and a compiled version, known as
+ bytecode. It is of interest mainly for its use in OpenFirmware.
+ .
+ This package provides a set of FCode utilities:
+  - the tokenizer toke
+  - the detokenizer detok
+  - a PCI rom header utility
+  - a portable implementation of Forth local values

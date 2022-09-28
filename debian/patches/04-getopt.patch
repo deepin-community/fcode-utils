@@ -1,0 +1,11 @@
+--- a/toke/toke.c
++++ b/toke/toke.c
+@@ -299,7 +299,7 @@ static void get_args( int argc, char **a
+ 			/*  Distinguish between a '?' from the user
+ 			 *  and one  getopt()  returned
+ 			 */
+-			if ( argv[argindx][1] != '?' )
++			if (optopt )
+ 			{
+ 			    inval_opt = TRUE;
+ 			    break;

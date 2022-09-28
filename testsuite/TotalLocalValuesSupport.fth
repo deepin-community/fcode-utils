@@ -1,0 +1,1 @@
+link ../localvalues/TotalLocalValuesSupport.fth

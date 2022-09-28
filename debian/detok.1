@@ -1,0 +1,69 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH DETOK "1" "May 15, 2007"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+detok \- OpenBIOS detokenizer
+
+.SH SYNOPSIS
+.B detok
+.I [options] forth\-file
+.SH DESCRIPTION
+.B detok
+is an open-source FCode detokenizer for the OpenBIOS project. It performs 
+the reverse function, that is, it converts binary FCode into a form that can
+be read for purposes of verification.
+
+.SH OPTIONS
+.TP
+.B \-h, \-?
+Print a brief help message and then exit.
+.TP
+.B \-v, \-\-verbose
+Print additional messages: the hex value of each token processed, as well as a
+signature block.
+.TP
+.B \-o
+Display the positions of the tokens relative to the start of the first FCode 
+block after a PCI header (if one is present), and the destination-offset of each branch.
+.br
+Note that the combination of the Verbose and Offsets options yields the maximum amount of useful information.  
+.TP
+.B \-n
+Display the sequential number of each line of output.
+.br
+Note that the \-n and \-o options are mutually exclusive; if both are specified, \-o will be favoured.
+.TP
+.B \-a
+Do not stop when end0 has been encountered. This option is usually not needed, 
+but may be useful in cases where a file has been corrupted or when something 
+very strange has been tokenized...
+.TP
+.B \-f \fIFCode-List-File\fB
+Pre-load additional FCodes before processing. These might be, for instance, a set of 
+vendor-specific FCodes that were generated for a specific vendor's products by a 
+tokenizer customized for that specific vendor. 
+
+.SH "SEE ALSO"
+\fBtoke\fP(1).
+
+.SH AUTHORS
+David L. Paktor <dlpaktor@us.ibm.com>
+
+.PP
+This manual page was written by Aurelien Jarno <aurel32@debian.org> for the Debian
+GNU/Linux system (but may be used by others).
+

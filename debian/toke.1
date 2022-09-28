@@ -1,0 +1,189 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH TOKE "1" "May 15, 2007"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+toke \- OpenBIOS tokenizer
+
+.SH SYNOPSIS
+.B toke
+.I [options] forth\-file
+.SH DESCRIPTION
+.B toke
+is an open-source FCode Tokenizer from the OpenBIOS project.
+
+.SH OPTIONS
+.TP
+.B \-h, \-?
+Print a brief help message and then exit.
+.TP
+.B \-i, \-\-ignore\-errors
+Generate a Binary Output even if errors were reported.
+.TP
+.B \-l, \-\-load\-list
+Collect the names of \fIfload\fRed files into an FLoad-List file. The names collected are in the same
+form as they were presented in the \fIfload\fR statements. 
+.br
+The name of the FLoad-List File is derived from the name of the binary output file, by replacing
+its extension with \fI.fl\fR , or, if the binary output file name had no extension, merely appending 
+the extension \fI.fl\fR.
+.br
+The binary output file name used for this purpose is either the one specified on the command line, 
+or the one created by default. 
+.TP
+.B \-o, \-\-output\-name \fIOutputFileName\fR, 
+Direct the binary output (FCode result of Tokenization) to the named file instead of to the 
+default-named file. This option is not valid when multiple input files are named. 
+.TP
+.B \-P, \-\-dependencies
+Collect the fully-resolved pathnames of floaded and ENCODEd files into a dependency-list file.
+The names collected are in the form that is presented to the host operating system: shell
+environment Variables and related expressions will be fully expanded, and the directory within
+the include-list in which the file was found will be attached.
+.br
+The name of the dependency-list file will be the same as that of the FLoad-list file, except that
+its extension will be \fI.P\fR instead of \fI.fl\fR.
+.TP
+.B \-v, \-\-verbose
+Print additional messages (including advisories) during tokenization.
+.TP
+.B \-I, \-\-Include \fIdirectory\fR
+This tokenizer supports the notion of an include-list. The user creates the include-list by 
+specifying a number of \fI\-I directory\fR pairs on the command-line. All file-reads, whether for
+an fload command or an encode-file directive, will involve a search for the named file through
+the directories of the include-list, in the order they were supplied on the command-line. 
+.br
+If no include-list is created, file-reads are relative to the current working Directory. If an
+include-list is created, file-reads are restricted to the directories within it.  For the 
+current working directory to be included in the file-search, it must be specified explicitly.
+\fB-I.\fR  will accomplish that quite effectively.
+.TP
+.B \-T, \-\-Trace \fIsymbol\fR
+This tokenizer supports the notion of a trace-list. The User creates the trace-list by specifying
+a number of \fI\-T symbol\fR pairs on the command-line.
+.br
+When a name is defined, whether as an FCode, an alias, a Macro or anything else, either in normal
+tokenization mode or "Tokenizer Escape"\(hymode, if it matches a symbol that has been added to the trace
+list, a trace note message will be issued indicating that a definition of that name has been created.
+Subsequent trace note Messages will be issued when the definition of that name is invoked.
+.br
+This trace-symbols feature can be helpful during maintenance of legacy code, for instance, when
+multiple symbols carry the same name.
+.TP
+.B \-d, \-\-define \fISymbol[=Value]\fR
+Define a command-line symbol and optionally, assign a value to it. If you wish the \fIvalue\fR to 
+contain spaces or quotes, you can accomplish that using the shell escape conventions. This 
+sequence may be repeated. Once a Symbol is defined on the command-line, it stays in effect for 
+the duration of the entire batch of tokenizations (i.e., if there are multiple input files named
+on the command line). Command-line Symbols can be tested for purposes of conditional tokenization,
+or their assigned values can be evaluated.
+.TP
+.B "\-f, \-\-flag \fI[no]<FlagName>\fR"
+The tokenizer recognizes a specific set of special-feature flag-names; each is associated with a 
+specific non-standard variant behavior. Pass the flag-name as an argument to the \fI\-f\fR switch
+to enable the behavior; to disable it, precede the flag-name with the optional string \fIno\fR.
+.br
+The settings of the special-feature flags can also be changed or displayed from within the source 
+input file.
+.br
+The special-feature flags are all initially set to be enabled, except where noted.
+.br
+The flag-names and their associated special-features are as follows:
+.RS
+.TP
+.B Local\-Values
+Support IBM-style Local Values ("LV"s). Initially disabled.
+.TP
+.B LV\-Legacy\-Separator
+Allow Semicolon for Local Values Separator ("Legacy").
+.TP
+.B LV\-Legacy\-Message
+Display a Warning Message when Semicolon is used as the Local Values Separator. 
+.TP
+.B ABORT\-Quote
+Allow ABORT" macro.
+.TP
+.B Sun\-ABORT\-Quote
+ABORT" with implicit IF ... THEN 
+.TP
+.B Abort\-Quote\-Throw
+Use \-2 THROW, rather than ABORT, in an Abort" phrase
+.TP
+.B String\-remark\-escape
+Allow "\\ (Quote-Backslash) to interrupt string parsing.
+.TP
+.B Hex\-remark\-escape
+Allow \\ (Backslash) to interrupt hex-sequence parsing within a string.
+.TP
+.B C\-Style\-string\-escape
+Allow the C-style String-Escape pairs \\n \\t and \\xx\\ to be treated as special characters in string parsing. 
+.TP
+.B Always\-Headers
+Override occurrences of the standard directive headerless in the source with -- effectively -- headers
+to make all definitions have a header. Occurrences of the directive external will continue to behave in the 
+standard manner. Initially disabled. 
+.TP
+.B Always\-External
+All definitions will be made as though under the external directive; occurrences of either Standard directive
+headerless or headers in the source will be overridden. This special-feature flag will also override the 
+\fIAlways\-Headers\fR special-feature flag in the event that both have been specified. Initially disabled. 
+.TP
+.B Warn\-if\-Duplicate
+Display a WARNING message whenever a definition is made whose name duplicates that of an existing definition.
+Disabling this flag will suspend the duplicate-names test globally, until it is re-enabled. A Directive is 
+supported that will suspend the test for the duration of only a single definition, without affecting global behavior. 
+.TP
+.B Obsolete\-FCode\-Warning
+Display a WARNING message whenever an FCode function is invoked that the Standard identifies as obsolete.
+.TP
+.B Trace\-Conditionals
+Issue advisory messages about the state of conditional tokenization. (Remember that advisory messages are
+displayed only if the \fIverbose\fR option \fI\-v\fR is set.) Initially disabled. 
+.TP
+.B Upper\-Case\-Token\-Names  
+.B Lower\-Case\-Token\-Names  
+When outputting the names of headered functions (\fBtoken-names\fR) to the binary output file, override the 
+character-case in which the names appeared in the source, and convert them to \fIUpper-\fR or \fILower-\fR \(hyCase,
+respectively. (These flags do not affect text string sequences, whose character-case is always preserved.) 
+Initially disabled.
+.TP
+.B Big\-End\-PCI\-Rev\-Level
+Save the \fBRevision Level\fR of the Vendor's ROM field of the PCI Header in big-endian byte-order, rather 
+than little-endian as per the general PCI Standard convention. (This flag does not affect any other field
+ of the PCI Header). Initially disabled.
+.TP
+.B Ret\-Stk\-Interp
+Allow return-stack operations during interpretation. While the standard specifies that usage of the operators
+\fB>r\fR, \fBr@\fR, and \fBr>\fR while interpreting is allowed, actual practice in the industry is inconsistent.
+Developers who wish to take a more cautious approach to this question can disable this flag so that any attempt 
+to use the operators \fB>r\fR, \fBr@\fR, and \fBr>\fR in the interpreting state will generate an ERROR Message.
+.RE
+.P
+Also, the pseudo-flag-name \fIhelp\fR will cause a list of the flag-names and their associated special-features
+to be printed.
+
+.SH "SEE ALSO"
+\fBdetok\fP(1).
+
+.SH AUTHORS
+Stefan Reinauer <stepan@openbios.org>
+.br
+David L. Paktor <dlpaktor@us.ibm.com>
+
+.PP
+This manual page was written by Aurelien Jarno <aurel32@debian.org> for the Debian
+GNU/Linux system (but may be used by others).
+

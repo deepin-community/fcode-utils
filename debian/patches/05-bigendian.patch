@@ -1,0 +1,45 @@
+------------------------------------------------------------------------
+r1354 | mcayland | 2015-11-06 16:06:25 +0100 (ven. 06 nov. 2015) | 19 lignes
+
+toke: fix line parsing on big-endian
+
+Trying to compile openbios on Fedora 22 ppc64, I had the following error:
+
+toke -o QEMU,VGA.bin ~/openbios/drivers/vga.fs
+...
+Tokenizing  ~/openbios/drivers/vga.fs   Binary output to QEMU,VGA.bin
+Warning:  File ~/openbios/drivers/vga.fs, Line 1.  Unterminated comment
+Nothing Tokenized.  1 Warning.
+
+This can be reproduced with the fcode-utils examples.
+
+"toke" is parsing the comment line until it finds a '\n'.
+The '\n' is stored as a char in a field of an union,
+but it is read as a long. It works well on little endian but
+not on big endian.
+
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+Signed-off-by: Mark Cave-Ayland <mark.cave-ayland@ilande.co.uk>
+------------------------------------------------------------------------
+Index: fcode-utils-devel/toke/scanner.c
+===================================================================
+--- fcode-utils-devel/toke/scanner.c	(revision 1353)
++++ fcode-utils-devel/toke/scanner.c	(revision 1354)
+@@ -1625,7 +1625,7 @@
+ 
+ void user_message( tic_param_t pfield )
+ {
+-    char delim = (char)pfield.deflt_elem ;
++    char delim = (char)pfield.fw_token ;
+     handle_user_message( delim, TRUE);
+ }
+ 
+@@ -5295,7 +5295,7 @@
+ 
+ void process_remark( tic_param_t pfield )
+ {
+-    char until_char = (char)pfield.deflt_elem ;
++    char until_char = (char)pfield.fw_token ;
+     unsigned int start_lineno = lineno;
+ 
+ #ifdef DEBUG_SCANNER

@@ -1,0 +1,4 @@
+toke/toke usr/bin
+detok/detok usr/bin
+romheaders/romheaders usr/bin
+localvalues usr/share/fcode-utils
